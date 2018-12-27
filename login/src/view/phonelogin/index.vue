@@ -6,14 +6,14 @@
         <section>
             <div class="yanzheng">
                 <label for=""><img src="../../static/img/3_03.jpg" alt=""></label>
-                <input type="text" placeholder="手机号" class="in">
+                <input @blur = "checkPhone" @click = "getnumber" type="text" placeholder="手机号" class="in shoujihao">
             </div>
             <div class="yanzheng">
                 <label for=""><img src="../../static/img/3_06.jpg" alt=""></label>
-                <input type="text" placeholder="密码" class="in">
+                <input @blur = "setItem"  @click = "getmima" type="text" placeholder="密码" class="in mima">
             </div>
             <div class="button">
-                <button>登陆</button>
+               <button @click = "login" >登陆</button>
             </div>
             <div class="resetpassword">
                 <p>重设密码</p>   
@@ -29,15 +29,62 @@ export default {
         return {
 
         }
+    },
+    methods: {
+        checkPhone(){ 
+            var phone = document.getElementsByClassName('shoujihao')[0].value;
+            if(!(/^1[34578]\d{9}$/.test(phone))){ 
+                alert("手机号码有误，请重填");  
+                return false; 
+            } 
+        },
+        checkmima(){ 
+            var mima = document.getElementsByClassName('mima')[0].value;
+            if(!(/^.*(?=.{6,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/.test(mima))){ 
+                alert("密码有误，请重填");  
+                return false; 
+            } else{
+                return true
+            }
+        },
+        login(){
+            var mima = document.getElementsByClassName('mima')[0].value;
+            var phone = document.getElementsByClassName('shoujihao')[0].value;
+            if(this.checkmima()){
+                this.$router.push({
+                    path:"/gexingtuijian",
+                    
+                })
+            }
+        },
+        setItem(){
+            var phoneNumber = document.querySelector(".shoujihao").value
+            window.localStorage.setItem("phoneNumber",phoneNumber)
+            var mima = document.querySelector(".mima").value
+            window.localStorage.setItem("mima",mima)
+
+        },
+        getnumber(){
+            var phonenumber = window.localStorage.getItem("phoneNumber")
+                document.querySelector(".shoujihao").value = phonenumber
+                
+        },
+        getmima(){
+            var mima = window.localStorage.getItem("mima")
+                document.querySelector(".mima").value = mima
+               
+        }
+
     }
+   
 }
+
 </script>
 <style lang="scss">
     .phonelogin_wrap{
         height: 100%;
         display: flex;
         flex-direction: column;
-        
         header{
             height: 60px;
             text-align: center;
@@ -51,7 +98,6 @@ export default {
                 font-size: 30px;
             }
         }
-        
         section{
             flex: 1;
             .yanzheng{
